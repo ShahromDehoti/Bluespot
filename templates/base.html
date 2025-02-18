@@ -1,0 +1,21 @@
+<!-- templates/base.html -->
+<!doctype html>
+<html>
+  <head>
+    <title>Photo Hosting App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" integrity="sha512-p0SmG+PZOWA5tYJpQ/9CDEw0Xykq/e5vfaL8i40ZQF5M5qEJ+7O6Eu+5VhIFzWYHdcq8G6FKdVj7Z9b+8dXQ9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </body>
+</html>
