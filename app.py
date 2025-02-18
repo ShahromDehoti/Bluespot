@@ -66,7 +66,39 @@ def logout():
     flash('Logged out.')
     return redirect(url_for('index'))
 
+@app.route('/upload', methods=['GET', 'POST'])
+@login_required
+def upload():
+    if request.method == 'POST':
+        if 'photo' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['photo']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        # Optionally, secure the filename.
+        filename = secure_filename(file.filename)
+        photo_data = file.read()  # Read file data as binary
 
+        new_photo = Photo(data=photo_data, owner_id=current_user.id)
+        db.session.add(new_photo)
+        db.session.commit()
+
+        # Launch background thread to process image
+        thread = threading.Thread(target=process_image, args=(new_photo.id, current_user.id))
+        thread.start()
+
+        flash('Photo uploaded. AI processing started.')
+        return redirect(url_for('dashboard'))
+    return render_template('upload.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    # List all photos uploaded by the current user
+    photos = Photo.query.filter_by(owner_id=current_user.id).all()
+    return render_template('dashboard.html', photos=photos)
 
 if __name__ == '__main__':
     # Run with SocketIO so that we support WebSockets for real-time updates.
