@@ -1,6 +1,6 @@
 # models.py
-from app import db
 from flask_login import UserMixin
+from myphoto_app.extensions import db
 import datetime
 
 class User(UserMixin, db.Model):

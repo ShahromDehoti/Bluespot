@@ -1,8 +1,6 @@
 # tasks.py
 import time
-import threading
-from flask_socketio import SocketIO
-from app import socketio
+from .extensions import socketio
 
 def process_image(photo_id, user_id):
     """
