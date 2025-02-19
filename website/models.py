@@ -1,7 +1,7 @@
 # models.py
 from flask_login import UserMixin
-from myphoto_app.extensions import db
 import datetime
+from .myphoto_app import db
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

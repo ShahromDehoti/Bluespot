@@ -1,13 +1,10 @@
 # myphoto_app/routes.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
-from .extensions import db
 from .models import User, Photo
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-import threading
-from .tasks import process_image
-
+from .. import db
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -29,10 +26,6 @@ def upload():
         new_photo = Photo(data=photo_data, owner_id=current_user.id)
         db.session.add(new_photo)
         db.session.commit()
-
-        # Start background thread for processing the image
-        thread = threading.Thread(target=process_image, args=(new_photo.id, current_user.id))
-        thread.start()
 
         flash('Photo uploaded. Processing started.')
         return redirect(url_for('main.dashboard'))
