@@ -1,17 +1,18 @@
 # myphoto_app/routes.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
-from .models import User, Photo
+from .models import Photo
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from .. import db
-main = Blueprint('main', __name__)
+from . import db
 
-@main.route('/')
+views = Blueprint('views', __name__)
+
+@views.route('/')
 def index():
     return render_template('base.html')
 
-@main.route('/upload', methods=['GET', 'POST'])
+@views.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
     if request.method == 'POST':
@@ -31,7 +32,7 @@ def upload():
         return redirect(url_for('main.dashboard'))
     return render_template('upload.html')
 
-@main.route('/dashboard')
+@views.route('/dashboard')
 @login_required
 def dashboard():
     photos = Photo.query.filter_by(owner_id=current_user.id).all()
