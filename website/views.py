@@ -13,7 +13,6 @@ def index():
     return render_template('base.html')
 
 @views.route('/upload', methods=['GET', 'POST'])
-@login_required
 def upload():
     if request.method == 'POST':
         if 'photo' not in request.files:
@@ -33,7 +32,6 @@ def upload():
     return render_template('upload.html')
 
 @views.route('/dashboard')
-@login_required
 def dashboard():
     photos = Photo.query.filter_by(owner_id=current_user.id).all()
     return render_template('dashboard.html', photos=photos)

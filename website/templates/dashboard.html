@@ -1,14 +1,4 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Your Photos</h2>
-<ul>
-  {% for photo in photos %}
-  <li>
-    Photo ID: {{ photo.id }}
-    <div id="progress-{{ photo.id }}" style="width: 300px; border: 1px solid #ccc;">
-      <div style="height: 20px; width: 0%; background: green;" id="bar-{{ photo.id }}"></div>
-    </div>
-  </li>
-  {% endfor %}
-</ul>
 {% endblock %}
