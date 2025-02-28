@@ -7,9 +7,10 @@ from flask_login import login_required, current_user
 views = Blueprint('views', __name__)
 
 @views.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
-    return render_template('dashboard.html')
+    if current_user.is_authenticated:
+        return redirect(url_for('views.dashboard'))
+    return render_template('index.html')
 
 @views.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -31,6 +32,7 @@ def upload():
     return render_template('upload.html', user=current_user)
 
 @views.route('/dashboard')
+@login_required
 def dashboard():
     photos = Photo.query.filter_by(owner_id=current_user.id).all()
     return render_template('dashboard.html', photos=photos)
