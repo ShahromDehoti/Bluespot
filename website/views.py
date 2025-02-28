@@ -2,13 +2,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Photo
 from . import db
-
+from flask_login import login_required, current_user
 
 views = Blueprint('views', __name__)
 
-@views.route('/')
+@views.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
-    return render_template('base.html')
+    return render_template('dashboard.html')
 
 @views.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -26,8 +27,8 @@ def upload():
         db.session.commit()
 
         flash('Photo uploaded. Processing started.')
-        return redirect(url_for('main.dashboard'))
-    return render_template('upload.html')
+        return redirect(url_for('views.dashboard'))
+    return render_template('upload.html', user=current_user)
 
 @views.route('/dashboard')
 def dashboard():
