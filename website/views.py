@@ -1,10 +1,8 @@
 # myphoto_app/routes.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import current_user, login_required, login_user, logout_user
 from .models import Photo
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
 from . import db
+
 
 views = Blueprint('views', __name__)
 
