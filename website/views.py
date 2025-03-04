@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Photo
 from . import db
 from flask_login import login_required, current_user
+import base64
 
 views = Blueprint('views', __name__)
 
@@ -35,4 +36,14 @@ def upload():
 @login_required
 def dashboard():
     photos = Photo.query.filter_by(owner_id=current_user.id).all()
-    return render_template('dashboard.html', photos=photos)
+    # Convert binary photo data to base64 for display
+    photo_data = []
+    for photo in photos:
+        encoded_data = base64.b64encode(photo.data).decode('utf-8')
+        photo_data.append({
+            'id': photo.id,
+            'data': encoded_data,
+            'description': photo.description,
+            'upload_date': photo.upload_date
+        })
+    return render_template('dashboard.html', photos=photo_data)
