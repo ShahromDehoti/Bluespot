@@ -1,4 +1,36 @@
 {% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
 {% block content %}
-<h2>Your Dashboard</h2>
+<div class="container">
+    <h2 class="my-4">Your Photos</h2>
+    
+    {% if photos %}
+        <div class="row">
+            {% for photo in photos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="data:image/jpeg;base64,{{ photo.data }}" 
+                             class="card-img-top" 
+                             alt="Photo">
+                        <div class="card-body">
+                            {% if photo.description %}
+                                <p class="card-text">{{ photo.description }}</p>
+                            {% endif %}
+                            <p class="card-text"><small class="text-muted">Uploaded on {{ photo.upload_date.strftime('%Y-%m-%d %H:%M') }}</small></p>
+                            <!-- Add delete button if needed -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No photos uploaded yet. <a href="{{ url_for('views.upload') }}">Upload your first photo!</a></p>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{{ url_for('views.upload') }}" class="btn btn-primary">Upload New Photo</a>
+    </div>
+</div>
 {% endblock %}
+
