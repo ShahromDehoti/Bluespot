@@ -19,6 +19,9 @@
                             {% endif %}
                             <p class="card-text"><small class="text-muted">Uploaded on {{ photo.upload_date.strftime('%Y-%m-%d %H:%M') }}</small></p>
                             <!-- Add delete button if needed -->
+                            <form action="{{ url_for('views.delete_photo', photo_id=photo.id) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>

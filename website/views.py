@@ -47,3 +47,16 @@ def dashboard():
             'upload_date': photo.upload_date
         })
     return render_template('dashboard.html', photos=photo_data)
+
+@views.route('/delete-photo/<int:photo_id>', methods=['POST'])
+@login_required
+def delete_photo(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    if photo.owner_id != current_user.id:
+        flash('You do not have permission to delete this photo.', category='error')
+        return redirect(url_for('views.dashboard'))
+    
+    db.session.delete(photo)
+    db.session.commit()
+    flash('Photo deleted successfully.', category='success')
+    return redirect(url_for('views.dashboard'))
